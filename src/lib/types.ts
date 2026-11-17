@@ -34,6 +34,8 @@ export type ChartState = {
   title: string;
   labels: AxisLabels;
   tierLabels: string[];
+  /** Multiplier for the card notes text, 0.7–1.8. */
+  textScale?: number;
   /** handle -> placement */
   placements: Record<string, Placement>;
 };

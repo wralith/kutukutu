@@ -287,6 +287,7 @@ export default function App() {
           onExport={handleExport}
           onTemplate={setTemplate}
           onTitle={(title) => setChart((current) => ({ ...current, title }))}
+          onTextScale={(textScale) => setChart((current) => ({ ...current, textScale }))}
         />
         {selected && (
           <div className="selection-hint">

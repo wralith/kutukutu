@@ -7,9 +7,18 @@ type Props = {
   onExport: () => void;
   onTemplate: (template: TemplateId) => void;
   onTitle: (title: string) => void;
+  onTextScale: (scale: number) => void;
 };
 
-export default function Toolbar({ chart, exporting, onExport, onTemplate, onTitle }: Props) {
+export default function Toolbar({
+  chart,
+  exporting,
+  onExport,
+  onTemplate,
+  onTitle,
+  onTextScale,
+}: Props) {
+  const textScale = Math.min(1.8, Math.max(0.7, chart.textScale ?? 1));
   return (
     <div className="toolbar">
       <div className="template-picker" role="tablist" aria-label="Chart type">
@@ -36,6 +45,20 @@ export default function Toolbar({ chart, exporting, onExport, onTemplate, onTitl
         placeholder="Chart title…"
         aria-label="Chart title"
       />
+
+      <label className="text-scale">
+        <span className="text-scale-label" aria-hidden="true">Aa</span>
+        <input
+          type="range"
+          min={0.7}
+          max={1.8}
+          step={0.05}
+          value={textScale}
+          onChange={(event) => onTextScale(Number(event.target.value))}
+          aria-label="Card text size"
+        />
+        <span className="text-scale-value">{Math.round(textScale * 100)}%</span>
+      </label>
 
       <div className="toolbar-actions">
         <button type="button" className="btn btn-primary" onClick={onExport} disabled={exporting}>

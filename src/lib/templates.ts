@@ -35,6 +35,7 @@ export function defaultChart(template: TemplateId): ChartState {
     title: '',
     labels: { top: 'Top', bottom: 'Bottom', left: 'Left', right: 'Right' },
     tierLabels: ['S', 'A', 'B', 'C', 'D', 'F'],
+    textScale: 1,
     placements: {},
   };
 }

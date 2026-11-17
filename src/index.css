@@ -376,6 +376,37 @@ button {
   gap: 8px;
 }
 
+.text-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.text-scale-label {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.text-scale input[type='range'] {
+  width: 96px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.text-scale-value {
+  min-width: 34px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 .btn {
   background: var(--panel-2);
   border: 1px solid var(--border-strong);
@@ -528,7 +559,9 @@ button {
   width: 100%;
   aspect-ratio: 1;
   display: grid;
-  gap: 0;
+  gap: 3px;
+  border: 3px solid #000;
+  background: #000;
   overflow: hidden;
   user-select: none;
 }
@@ -548,8 +581,10 @@ button {
 .profile-card {
   flex: 1;
   min-width: 0;
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: 38% 1fr;
+  grid-template-rows: auto auto;
+  align-content: start;
   padding: 0;
   border: none;
   background: transparent;
@@ -565,8 +600,9 @@ button {
   cursor: grabbing;
 }
 
+/* Photo on the right: swap the columns instead of reversing the flow. */
 .profile-card.is-flipped {
-  flex-direction: row-reverse;
+  grid-template-columns: 1fr 38%;
 }
 
 .profile-card:hover {
@@ -574,13 +610,18 @@ button {
 }
 
 .card-photo {
-  flex: 0 0 38%;
-  align-self: flex-start;
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
   aspect-ratio: 1;
   display: block;
   padding: 2.5cqw;
   overflow: hidden;
   background: transparent;
+}
+
+.profile-card.is-flipped .card-photo {
+  grid-column: 2;
 }
 
 .card-photo .avatar-fill {
@@ -595,38 +636,42 @@ button {
   font-size: 2rem;
 }
 
+/* Let the name and the notes become grid items of .profile-card. */
 .card-body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.4cqw;
-  padding: 3cqw 4cqw;
-  overflow: hidden;
+  display: contents;
 }
 
 .card-name {
+  grid-column: 2;
+  grid-row: 1;
   min-width: 0;
+  align-self: center;
+  padding: 3cqw 3cqw 2cqw 2.5cqw;
   font-size: clamp(12px, 13cqw, 36px);
   font-weight: 800;
   line-height: 1.02;
   letter-spacing: -0.015em;
   color: #34353f;
   overflow-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  hyphens: auto;
+}
+
+.profile-card.is-flipped .card-name {
+  grid-column: 1;
+  padding: 3cqw 2.5cqw 2cqw 3cqw;
 }
 
 .card-notes {
+  grid-column: 1 / -1;
+  grid-row: 2;
   min-width: 0;
-  font-size: clamp(7px, 7.5cqw, 18px);
+  padding: 2cqw 3cqw 3cqw;
+  font-size: calc(clamp(9px, 8.5cqw, 22px) * var(--card-text-scale, 1));
   font-weight: 500;
   line-height: 1.25;
   color: #3d3f4b;
   white-space: pre-wrap;
-  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 .card-empty {
@@ -1068,8 +1113,21 @@ button {
   }
 
   .toolbar {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 8px;
+  }
+
+  .text-scale {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .text-scale input[type='range'] {
+    width: 58px;
+  }
+
+  .text-scale-value {
+    display: none;
   }
 
   .toolbar-actions {
@@ -1237,6 +1295,7 @@ button {
   /* Keep the tiny phone cards tidy: one line with an ellipsis. */
   .card-name {
     display: block;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }

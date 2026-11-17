@@ -1,4 +1,4 @@
-import { useRef, type DragEvent, type MouseEvent, type RefObject } from 'react';
+import { useRef, type CSSProperties, type DragEvent, type MouseEvent, type RefObject } from 'react';
 import type { AxisLabels, ChartState, Placement, Profile } from '../lib/types';
 import { TEMPLATE_DEFS, TIER_COLORS, cardColor } from '../lib/templates';
 import AvatarImg from './AvatarImg';
@@ -46,9 +46,14 @@ function PlacedChip({ profile, onUnplace }: { profile: Profile; onUnplace: () =>
 
 export default function Board(props: BoardProps) {
   const { chart, surfaceRef } = props;
+  const textScale = Math.min(1.8, Math.max(0.7, chart.textScale ?? 1));
   return (
     <div className={`board board-${chart.template}`}>
-      <div ref={surfaceRef} className="export-surface">
+      <div
+        ref={surfaceRef}
+        className="export-surface"
+        style={{ '--card-text-scale': textScale } as CSSProperties}
+      >
         {chart.title.trim() !== '' && <h1 className="chart-heading">{chart.title}</h1>}
         {chart.template === 'alignment' && <AlignmentBoard {...props} />}
         {chart.template === 'tier' && <TierBoard {...props} />}
