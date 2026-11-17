@@ -56,12 +56,15 @@ always included in the exported PNG. PNG export works the same on mobile.
 
 ## Colors and cards
 
-The color chart is a 4×4 collage: each cell holds one person, with a square photo pinned to the
-card's top-left corner, a large editable card name, and a free-text block underneath.
+The color chart is a collage that holds one person per cell: a square photo pinned to the card's
+top-left corner, a large editable card name, and a free-text block underneath. The **Grid** switch
+in the toolbar toggles between 4×4, 6×6 and 8×8; placements are rescaled when you switch, and cards
+that would collide when the grid shrinks move to the nearest free cell.
 Backgrounds follow the reference palette — pink/red top-left, blue top-right, green bottom-left,
-yellow bottom-right. Card names and text are stored with the placement and rendered exactly as
-typed (line breaks included). The card name defaults to the profile's display name and can be
-overridden per card.
+yellow bottom-right, fading to muted tones along the middle. The 6×6 and 8×8 grids also draw a
+heavier cross through their center. Card names and text are stored with the placement and rendered
+exactly as typed (line breaks included). The card name defaults to the profile's display name and
+can be overridden per card.
 
 ## PNG export
 

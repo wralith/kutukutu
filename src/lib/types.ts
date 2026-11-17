@@ -9,6 +9,9 @@ export type Profile = {
 
 export type TemplateId = 'alignment' | 'tier' | 'scatter';
 
+/** Color chart grid size. */
+export type ColorChartSize = 4 | 6 | 8;
+
 /** Grid templates store a cell key such as "2-3"; scatter stores percentages. */
 export type Placement = {
   cell?: string;
@@ -31,6 +34,8 @@ export type AxisLabels = {
 
 export type ChartState = {
   template: TemplateId;
+  /** Color chart grid: 4x4 (default), 6x6 or 8x8. */
+  alignmentSize?: ColorChartSize;
   title: string;
   labels: AxisLabels;
   tierLabels: string[];

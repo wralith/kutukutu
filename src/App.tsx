@@ -1,6 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { AxisLabels, ChartState, Placement, Profile, TemplateId } from './lib/types';
-import { defaultChart, migratePlacements, normalizeChart } from './lib/templates';
+import type {
+  AxisLabels,
+  ChartState,
+  ColorChartSize,
+  Placement,
+  Profile,
+  TemplateId,
+} from './lib/types';
+import {
+  defaultChart,
+  migratePlacements,
+  normalizeChart,
+  resizeAlignmentPlacements,
+} from './lib/templates';
 import { exportNode } from './lib/exportImage';
 import ProfileSearch from './components/ProfileSearch';
 import Roster from './components/Roster';
@@ -186,15 +198,36 @@ export default function App() {
 
   const setTemplate = useCallback(
     (template: TemplateId) => {
-      setChart((current) =>
-        current.template === template
-          ? current
-          : {
-              ...current,
-              template,
-              placements: migratePlacements(current.placements, current.template, template),
-            },
-      );
+      setChart((current) => {
+        if (current.template === template) return current;
+        const size = current.alignmentSize ?? 4;
+        return {
+          ...current,
+          template,
+          placements: migratePlacements(
+            current.placements,
+            current.template,
+            template,
+            size,
+            size,
+          ),
+        };
+      });
+    },
+    [setChart],
+  );
+
+  const setAlignmentSize = useCallback(
+    (alignmentSize: ColorChartSize) => {
+      setChart((current) => {
+        const from = current.alignmentSize ?? 4;
+        if (from === alignmentSize) return current;
+        return {
+          ...current,
+          alignmentSize,
+          placements: resizeAlignmentPlacements(current.placements, from, alignmentSize),
+        };
+      });
     },
     [setChart],
   );
@@ -286,6 +319,7 @@ export default function App() {
           exporting={exporting}
           onExport={handleExport}
           onTemplate={setTemplate}
+          onAlignmentSize={setAlignmentSize}
           onTitle={(title) => setChart((current) => ({ ...current, title }))}
           onTextScale={(textScale) => setChart((current) => ({ ...current, textScale }))}
         />
@@ -325,6 +359,7 @@ export default function App() {
         <CardEditor
           profile={profiles[editing]}
           placement={chart.placements[editing]}
+          colorSize={chart.alignmentSize ?? 4}
           onLabel={(label) => setCardLabel(editing, label)}
           onNote={(note) => setNote(editing, note)}
           onFlip={() => toggleFlip(editing)}

@@ -1,6 +1,6 @@
 import { useRef, type CSSProperties, type DragEvent, type MouseEvent, type RefObject } from 'react';
 import type { AxisLabels, ChartState, Placement, Profile } from '../lib/types';
-import { TEMPLATE_DEFS, TIER_COLORS, cardColor } from '../lib/templates';
+import { TIER_COLORS, cardColor } from '../lib/templates';
 import AvatarImg from './AvatarImg';
 
 type BoardProps = {
@@ -86,7 +86,9 @@ function AxisLabelInput({
 }
 
 function AlignmentBoard({ chart, profiles, selected, onPlace, onEdit }: BoardProps) {
-  const { rows, cols } = TEMPLATE_DEFS.alignment;
+  const size = chart.alignmentSize ?? 4;
+  const rows = size;
+  const cols = size;
 
   const byCell = new Map<string, { handle: string; profile: Profile; placement: Placement }>();
   for (const [handle, placement] of Object.entries(chart.placements)) {
@@ -96,7 +98,7 @@ function AlignmentBoard({ chart, profiles, selected, onPlace, onEdit }: BoardPro
 
   return (
     <div
-      className="card-grid"
+      className={`card-grid${size !== 4 ? ' is-large' : ''}`}
       style={{
         gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
@@ -112,7 +114,7 @@ function AlignmentBoard({ chart, profiles, selected, onPlace, onEdit }: BoardPro
           <div
             key={key}
             className={`card-cell${selected ? ' is-target' : ''}`}
-            style={{ background: cardColor(r, c) }}
+            style={{ background: cardColor(r, c, size) }}
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => {
               const handle = placedHandle(event);

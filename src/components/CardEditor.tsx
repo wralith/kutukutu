@@ -1,10 +1,12 @@
-import type { Placement, Profile } from '../lib/types';
+import type { ColorChartSize, Placement, Profile } from '../lib/types';
 import { cardColor } from '../lib/templates';
 import AvatarImg from './AvatarImg';
 
 type Props = {
   profile: Profile;
   placement: Placement;
+  /** Color chart grid size, so the preview matches the card's cell. */
+  colorSize?: ColorChartSize;
   onLabel: (label: string) => void;
   onNote: (note: string) => void;
   onFlip: () => void;
@@ -15,6 +17,7 @@ type Props = {
 export default function CardEditor({
   profile,
   placement,
+  colorSize = 4,
   onLabel,
   onNote,
   onFlip,
@@ -22,7 +25,7 @@ export default function CardEditor({
   onClose,
 }: Props) {
   const [row = 0, col = 0] = (placement.cell ?? '0-0').split('-').map(Number);
-  const color = cardColor(row, col);
+  const color = cardColor(row, col, colorSize);
   const note = placement.note ?? '';
   const label = placement.label ?? profile.name;
 

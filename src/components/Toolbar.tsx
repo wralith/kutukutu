@@ -1,11 +1,12 @@
-import type { ChartState, TemplateId } from '../lib/types';
-import { TEMPLATES } from '../lib/templates';
+import type { ChartState, ColorChartSize, TemplateId } from '../lib/types';
+import { COLOR_CHART_SIZES, TEMPLATES } from '../lib/templates';
 
 type Props = {
   chart: ChartState;
   exporting: boolean;
   onExport: () => void;
   onTemplate: (template: TemplateId) => void;
+  onAlignmentSize: (size: ColorChartSize) => void;
   onTitle: (title: string) => void;
   onTextScale: (scale: number) => void;
 };
@@ -15,10 +16,12 @@ export default function Toolbar({
   exporting,
   onExport,
   onTemplate,
+  onAlignmentSize,
   onTitle,
   onTextScale,
 }: Props) {
   const textScale = Math.min(1.8, Math.max(0.7, chart.textScale ?? 1));
+  const alignmentSize = chart.alignmentSize ?? 4;
   return (
     <div className="toolbar">
       <div className="template-picker" role="tablist" aria-label="Chart type">
@@ -37,6 +40,26 @@ export default function Toolbar({
           </button>
         ))}
       </div>
+
+      {chart.template === 'alignment' && (
+        <div className="grid-switch" role="group" aria-label="Color chart grid size">
+          <span className="grid-switch-label" aria-hidden="true">
+            Grid
+          </span>
+          {COLOR_CHART_SIZES.map((size) => (
+            <button
+              key={size}
+              type="button"
+              className={alignmentSize === size ? 'active' : ''}
+              aria-pressed={alignmentSize === size}
+              onClick={() => onAlignmentSize(size)}
+              title={`${size} × ${size} color chart`}
+            >
+              {size}×{size}
+            </button>
+          ))}
+        </div>
+      )}
 
       <input
         className="title-input"

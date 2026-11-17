@@ -350,6 +350,47 @@ button {
   color: #fff;
 }
 
+.grid-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 3px 3px 9px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  flex-shrink: 0;
+}
+
+.grid-switch-label {
+  margin-right: 3px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.grid-switch button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.grid-switch button:hover {
+  color: var(--text);
+}
+
+.grid-switch button.active {
+  background: var(--accent-soft);
+  color: #6b46d6;
+  font-weight: 700;
+}
+
 .tab-short {
   display: none;
 }
@@ -690,6 +731,64 @@ button {
 
 .exporting .card-empty {
   display: none;
+}
+
+/* ---------- 6x6 / 8x8 color charts ---------- */
+
+/* Heavier cross through the middle, like the reference collage. */
+.card-grid.is-large {
+  position: relative;
+}
+
+.card-grid.is-large::before,
+.card-grid.is-large::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  background: #000;
+  pointer-events: none;
+}
+
+.card-grid.is-large::before {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.card-grid.is-large::after {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 4px;
+  transform: translateY(-50%);
+}
+
+.card-grid.is-large .card-name {
+  padding: 2.5cqw 2.5cqw 1.5cqw 2cqw;
+  font-size: clamp(8px, 11cqw, 24px);
+}
+
+.card-grid.is-large .profile-card.is-flipped .card-name {
+  padding: 2.5cqw 2cqw 1.5cqw 2.5cqw;
+}
+
+.card-grid.is-large .card-notes {
+  padding: 1.5cqw 2.5cqw 2.5cqw;
+  font-size: calc(clamp(7px, 7.5cqw, 18px) * var(--card-text-scale, 1));
+}
+
+.card-grid.is-large .card-photo {
+  padding: 1.5cqw;
+}
+
+.card-grid.is-large .card-photo .avatar-fallback.avatar-fill {
+  font-size: 1.1rem;
+}
+
+.card-grid.is-large .card-empty {
+  font-size: 16px;
 }
 
 /* ---------- avatars on the board ---------- */
@@ -1141,6 +1240,19 @@ button {
   .template-picker button {
     padding: 6px 8px;
     font-size: 13px;
+  }
+
+  .grid-switch {
+    padding: 3px;
+  }
+
+  .grid-switch-label {
+    display: none;
+  }
+
+  .grid-switch button {
+    padding: 6px 7px;
+    font-size: 12.5px;
   }
 
   .tab-full {
