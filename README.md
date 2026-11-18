@@ -51,8 +51,10 @@ blocked. PNG export reuses the image the board is currently showing.
 On phones the app becomes a full-screen canvas: brand + Save PNG and template/title on top,
 with a floating **People** button that opens a bottom sheet containing the search field and
 roster. Tap a person, then tap a cell to place them. Tap a placed card to edit its name and
-text, flip the photo side, or remove it. Card notes are hidden in the small phone preview but
-always included in the exported PNG. PNG export works the same on mobile.
+text, flip the photo side, or remove it. Card names and notes stay visible in the small phone
+preview: each card measures its own text and shrinks the font until the whole label fits, so
+handles are never cut off with an ellipsis. **Save PNG** opens the native share sheet on touch
+devices, where *Save Image* writes the picture straight to Photos.
 
 ## Colors and cards
 
@@ -71,3 +73,5 @@ can be overridden per card.
 The board is snapshotted straight from the DOM with [`html-to-image`](https://github.com/bubkoo/html-to-image),
 so the PNG matches what is on screen. Avatars are temporarily routed through
 `images.weserv.nl` during capture so the images are CORS-safe and never taint the canvas.
+On desktop the PNG downloads as a file; on touch devices it is passed to the Web Share API
+(falling back to a download when sharing is unavailable).

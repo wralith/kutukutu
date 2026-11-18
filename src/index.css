@@ -624,7 +624,7 @@ button {
   min-width: 0;
   display: grid;
   grid-template-columns: 38% 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto minmax(0, 1fr);
   align-content: start;
   padding: 0;
   border: none;
@@ -686,6 +686,7 @@ button {
   grid-column: 2;
   grid-row: 1;
   min-width: 0;
+  min-height: 0;
   align-self: center;
   padding: 3cqw 3cqw 2cqw 2.5cqw;
   font-size: clamp(12px, 13cqw, 36px);
@@ -693,6 +694,7 @@ button {
   line-height: 1.02;
   letter-spacing: -0.015em;
   color: #34353f;
+  overflow: hidden;
   overflow-wrap: break-word;
   hyphens: auto;
 }
@@ -706,12 +708,14 @@ button {
   grid-column: 1 / -1;
   grid-row: 2;
   min-width: 0;
+  min-height: 0;
   padding: 2cqw 3cqw 3cqw;
   font-size: calc(clamp(9px, 8.5cqw, 22px) * var(--card-text-scale, 1));
   font-weight: 500;
   line-height: 1.25;
   color: #3d3f4b;
   white-space: pre-wrap;
+  overflow: hidden;
   overflow-wrap: anywhere;
 }
 
@@ -1264,6 +1268,7 @@ button {
   }
 
   .title-input {
+    flex: 1 1 100%;
     min-width: 0;
     padding: 8px 9px;
   }
@@ -1394,23 +1399,8 @@ button {
     font-size: 25px;
   }
 
-  /* The board is a small preview on phones; notes are edited in the card sheet.
-     They still appear in the exported PNG. */
-  .card-grid .card-notes {
-    display: none;
-  }
-
-  .exporting .card-notes {
-    display: block;
-  }
-
-  /* Keep the tiny phone cards tidy: one line with an ellipsis. */
-  .card-name {
-    display: block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+  /* Card text scales itself down to fit a cell instead of truncating.
+     FitText measures each card, so no mobile-only hiding or ellipsis here. */
 }
 
 @media (max-width: 420px) {

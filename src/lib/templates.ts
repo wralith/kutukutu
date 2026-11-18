@@ -65,7 +65,7 @@ export function cardColor(r: number, c: number, size: ColorChartSize = 4): strin
 export function defaultChart(template: TemplateId): ChartState {
   return {
     template,
-    alignmentSize: 6,
+    alignmentSize: 4,
     title: '',
     labels: { top: 'Top', bottom: 'Bottom', left: 'Left', right: 'Right' },
     tierLabels: ['S', 'A', 'B', 'C', 'D', 'F'],

@@ -21,6 +21,50 @@ async function inlineImage(url: string): Promise<string | null> {
   }
 }
 
+function dataUrlToFile(dataUrl: string, filename: string): File {
+  const [meta, base64 = ''] = dataUrl.split(',');
+  const type = /data:([^;]+)/.exec(meta)?.[1] || 'image/png';
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return new File([bytes], filename, { type });
+}
+
+/**
+ * Touch devices have no useful download folder, so hand the PNG to the native
+ * share sheet — "Save Image" puts it straight into Photos. Desktop keeps the
+ * normal file download.
+ */
+async function saveImage(dataUrl: string, filename: string): Promise<void> {
+  const coarsePointer =
+    typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
+
+  if (
+    coarsePointer &&
+    typeof navigator.canShare === 'function' &&
+    typeof navigator.share === 'function'
+  ) {
+    try {
+      const file = dataUrlToFile(dataUrl, filename);
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file] });
+        return;
+      }
+    } catch (error) {
+      // The user closed the share sheet — don't also download the file.
+      if ((error as Error | undefined)?.name === 'AbortError') return;
+      // Sharing failed for another reason — fall through to a download.
+    }
+  }
+
+  const link = document.createElement('a');
+  link.href = dataUrl;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+}
+
 function waitForImage(img: HTMLImageElement): Promise<void> {
   return new Promise((resolve) => {
     if (img.complete) {
@@ -104,12 +148,7 @@ export async function exportNode(node: HTMLElement, filename: string): Promise<v
         onImageErrorHandler: () => '',
       });
 
-      const link = document.createElement('a');
-      link.href = dataUrl;
-      link.download = filename;
-      document.body.append(link);
-      link.click();
-      link.remove();
+      await saveImage(dataUrl, filename);
     } finally {
       node.classList.remove('exporting');
       restoreInputs();

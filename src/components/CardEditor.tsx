@@ -1,6 +1,7 @@
 import type { ColorChartSize, Placement, Profile } from '../lib/types';
 import { cardColor } from '../lib/templates';
 import AvatarImg from './AvatarImg';
+import FitText from './FitText';
 
 type Props = {
   profile: Profile;
@@ -58,8 +59,12 @@ export default function CardEditor({
               <AvatarImg profile={profile} fill />
             </span>
             <span className="card-body">
-              <span className="card-name">{label.trim() || profile.name}</span>
-              {note.trim() !== '' && <span className="card-notes">{note}</span>}
+              <FitText
+                className="card-name"
+                text={label.trim() || profile.name}
+                matchPhoto
+              />
+              {note.trim() !== '' && <FitText className="card-notes" text={note} />}
             </span>
           </div>
         </div>

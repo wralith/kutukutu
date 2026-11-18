@@ -2,6 +2,7 @@ import { useRef, type CSSProperties, type DragEvent, type MouseEvent, type RefOb
 import type { AxisLabels, ChartState, Placement, Profile } from '../lib/types';
 import { TIER_COLORS, cardColor } from '../lib/templates';
 import AvatarImg from './AvatarImg';
+import FitText from './FitText';
 
 type BoardProps = {
   chart: ChartState;
@@ -89,6 +90,7 @@ function AlignmentBoard({ chart, profiles, selected, onPlace, onEdit }: BoardPro
   const size = chart.alignmentSize ?? 4;
   const rows = size;
   const cols = size;
+  const textScale = Math.min(1.8, Math.max(0.7, chart.textScale ?? 1));
 
   const byCell = new Map<string, { handle: string; profile: Profile; placement: Placement }>();
   for (const [handle, placement] of Object.entries(chart.placements)) {
@@ -147,11 +149,17 @@ function AlignmentBoard({ chart, profiles, selected, onPlace, onEdit }: BoardPro
                   <AvatarImg profile={entry.profile} fill />
                 </span>
                 <span className="card-body">
-                  <span className="card-name">
-                    {entry.placement.label?.trim() || entry.profile.name}
-                  </span>
+                  <FitText
+                    className="card-name"
+                    text={entry.placement.label?.trim() || entry.profile.name}
+                    matchPhoto
+                  />
                   {(entry.placement.note ?? '').trim() !== '' && (
-                    <span className="card-notes">{entry.placement.note}</span>
+                    <FitText
+                      className="card-notes"
+                      text={entry.placement.note ?? ''}
+                      scale={textScale}
+                    />
                   )}
                 </span>
               </button>
